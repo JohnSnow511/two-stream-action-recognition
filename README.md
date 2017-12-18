@@ -23,22 +23,32 @@ We use a spatial and motion stream cnn with ResNet101 for modeling video informa
   
 ## 3. Training stategies
   ###  3.1 Spatial cnn
-  * In every mini-batch, we randomly select 64 frames from 186351 training frames.
+  * Here we utilize the techniques in Temporal Segment Network. For every videos in a mini-batch, we randomly select 3 frames from each video. Then a consensus among the frames will be derived as the video-level prediction for calculating loss.
   ### 3.2 Motion cnn
   * In every mini-batch, we randomly select 64 (batch size) videos from 9537 training videos and futher randomly select 1 stacked optical flow in each video. 
   ### 3.3 Data augmentation
   * Both stream apply the same data augmentation technique such as random cropping.
 ## 4. Testing method
-  * For every 3783 testing videos, we uniformly sample 25 frames in each video and the video level prediction is the voting result of all 25 frame level predictions.
+  * For every 3783 testing videos, we uniformly sample 19 frames in each video and the video level prediction is the voting result of all 19 frame level predictions.
+  * The reason we choose the number 19 is that the minimun number of video frames in UCF101 is 28 and we have to make sure there are sufficient frames for testing in 10 stack motion stream.
 ## 5. Performace
    
- network      | top1  | top5 |
---------------|:-----:|:----:| 
-Spatial cnn   | 82.4% | 94.8% | 
-Motion cnn    | 78.2% | 94.4% | 
-Average fusion| 89.9% | 98.3% |     
+ network      | top1  |
+--------------|:-----:|
+Spatial cnn   | 82.1% | 
+Motion cnn    | 80.3% | 
+Average fusion| 88.3% |      
    
-## 6. Result
-<img src="https://github.com/jeffreyhuang1/pytorch-two-stream-cnn-ucf101/blob/master/result/spatial_cnn.png" width = "400" height = "250" alt="Spatial" align=left />
-<img src="https://github.com/jeffreyhuang1/pytorch-two-stream-cnn-ucf101/blob/master/result/motion_cnn.png" width = "400" height = "250" alt="Motion" align=left />
+## 6. Pre-trained Model
+
+* [Spatial resent101](https://drive.google.com/drive/folders/1gVB5StqgoDJ3IxHUn7zoTzTNxzz3du3d?usp=sharing)
+* [Motion resent101](https://drive.google.com/drive/folders/1z3fYUOJx_l3BW-NSb7ti0DsyGLFk6Z7J?usp=sharing)
+
+## 7. Testing on Your Device
+  ### Spatial stream
+ * Please modify this [path](https://github.com/jeffreyhuang1/two-stream-action-recognition/blob/master/spatial_cnn.py#L42) and this [funcition](https://github.com/jeffreyhuang1/two-stream-action-recognition/blob/master/dataloader/spatial_dataloader.py#L21) to fit the UCF101 dataset on your device.
+ 
+ ### Motion stream
+ *  Please modify this [path](https://github.com/jeffreyhuang1/two-stream-action-recognition/blob/master/motion_cnn.py#L44) and this [funcition](https://github.com/jeffreyhuang1/two-stream-action-recognition/blob/master/dataloader/motion_dataloader.py#L32) to fit the UCF101 dataset on your device.
+ 
 
